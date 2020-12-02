@@ -15,6 +15,9 @@ class Category(Base):
     slug = models.SlugField(max_length=200, unique=True)
     short_description = models.CharField(blank=True, null=True, max_length=2000)
 
+    def __str__(self):
+        return f"{self.name}"
+
 
 class Tag(Base):
     name = models.CharField(max_length=100)
@@ -28,9 +31,13 @@ class Post(Base):
     description = models.TextField(max_length=2000, null=True, blank=True)
     image = models.ImageField(upload_to='images/', null=True, blank=True)
     is_active = models.BooleanField(default=True)
-    post = models.ManyToManyField(Tag)
+    post = models.ManyToManyField(Tag, null=True, blank=True)
     likes = models.PositiveIntegerField(default=0)
-    user_likes = models.ManyToManyField(User, related_name='user_likes')
+    user_likes = models.ManyToManyField(User, related_name='user_likes', null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name}"
+
 
 
 class Comment(Base):

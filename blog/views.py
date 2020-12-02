@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from blog.forms import UserForm, PostForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth import authenticate
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from blog.models import Post
 
@@ -67,4 +68,12 @@ def post_view_form(request):
 
 def home(request):
     post = Post.objects.all()
-    return render(request,'list.html.j2',{'post':post})
+    page = request.GET.get('page', 1)
+    paginator = Paginator(post, 2)
+    try:
+        post = paginator.page(page)
+    except PageNotAnInteger:
+        post = paginator.page(1)
+    except EmptyPage:
+        post = paginator.page(paginator.num_pages)
+    return render(request, 'list.html.j2', {'post': post,  'page': page})

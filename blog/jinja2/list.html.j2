@@ -2,40 +2,68 @@
 {% block body %}
 
 
-    {% for i in post %}
-        {{ i.name }}
-        {{ i.category }}
-        {{ i.description }}
-        {{ i.image }}
+{#    {% for i in post %}#}
+{#        {{ i.name }}#}
+{#        {{ i.category }}#}
+{#        {{ i.description }}#}
+{#        {{ i.image }}#}
+{#        {{i.created_at}}#}
+{#    {% endfor %}#}
+
+{% for i in post %}
+<div class="card mb-3">
+{% if i.image %}
+    <img class="card-img-top" src="{{i.image.url}}" alt="not availabe">
+{% endif %}
+{#   <img class="card-img-top" src=".../100px180/" alt="Card image cap">#}
+   <div class="card-body">
+    <h5 class="card-title">{{i.name}}</h5>
+    <p class="card-text">{{ i.description }}</p>
+    <p class="card-text"><small class="text-muted">Last updated {{i.created_at}} mins ago</small></p>
+  </div>
+</div>
+
+{% endfor %}
+
+{% if post.has_other_pages %}
+  <ul class="pagination">
+    {% if post.has_previous() %}
+      <li><a href="?page={{ post.previous_page_number() }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in post.paginator.page_range %}
+      {% if post.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
     {% endfor %}
+    {% if post.has_next() %}
+      <li><a href="?page={{ post.next_page_number() }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
 
 
-<div class="card mb-3">
-   <img class="card-img-top" src=".../100px180/" alt="Card image cap">
-   <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-  </div>
+
+{% if post.has_other_pages %}
+<div class="pagination">
+    <span class="step-links">
+        {% if post.has_previous() %}
+            <a class="btn btn-info" href="?page={{ post.previous_page_number() }}">Previous</a>
+        {% endif %}
+
+    <span class="current">
+           Page {{ post.number }} of {{ post.paginator.num_pages }}.
+    </span>
+
+        {% if post.has_next() %}
+            <a class="btn btn-info" href="?page={{ post.next_page_number() }}">Next</a>
+        {% endif %}
+    </span>
 </div>
-
-<div class="card mb-3">
-   <img class="card-img-top" src=".../100px180/" alt="Card image cap">
-   <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-  </div>
-</div>
-
-<div class="card mb-3">
-   <img class="card-img-top" src=".../100px180/" alt="Card image cap">
-   <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-  </div>
-</div>
-
-
+{% endif %}
 {% endblock %}
