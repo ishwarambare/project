@@ -22,7 +22,7 @@ class Tag(Base):
 
 class Post(Base):
     name = models.CharField(max_length=500)
-    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='post')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     slug = models.CharField(max_length=500, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField(max_length=2000, null=True, blank=True)
@@ -30,7 +30,7 @@ class Post(Base):
     is_active = models.BooleanField(default=True)
     post = models.ManyToManyField(Tag)
     likes = models.PositiveIntegerField(default=0)
-    user_likes = models.ManyToManyField(User)
+    user_likes = models.ManyToManyField(User, related_name='user_likes')
 
 
 class Comment(Base):
