@@ -23,7 +23,7 @@ class Tag(Base):
 class Post(Base):
     name = models.CharField(max_length=500)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    slug = models.CharField(max_length=500, null=True, blank=True)
+    slug = models.CharField(max_length=500, unique=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField(max_length=2000, null=True, blank=True)
     image = models.ImageField(upload_to='images/', null=True, blank=True)
