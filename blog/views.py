@@ -1,8 +1,9 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
 from blog.forms import UserForm, PostForm
@@ -14,6 +15,10 @@ from blog.models import Post, Category
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from .filters import PostFilter
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.contrib.auth import authenticate, login
+from .forms import LoginForm
 
 
 def signup(request):
@@ -27,7 +32,7 @@ def signup(request):
             password = form.cleaned_data['password']
             user = authenticate(username=username, password=password)
             login(request, user)
-            return HttpResponse('login sucessfull')
+            return redirect('blog:login')
         else:
             return HttpResponse('please check the credential')
     else:
@@ -36,21 +41,41 @@ def signup(request):
 
 
 def login_view(request):
-    form = AuthenticationForm()
+    # form = AuthenticationForm()
+
     if request.method == 'POST':
-        form = AuthenticationForm(request=request, data=request.POST)
+        form = LoginForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
+            data = form.cleaned_data
+            username_ = data['username']
+            print(username_)
+            password_ = data['password']
+            print(password_)
+            user = authenticate(request, username=username_, password=password_)
+            print(user)
+            if user is None:
+                print(user)
                 login(request, user)
-                messages.info(request, f"You are now logged in as {username}")
-                return redirect('/')
+                # messages.info(request, f"You are now logged in as {username}")
+                return redirect('blog:home')
+            else:
+                return HttpResponse('Disabled account')
+
+        # form = AuthenticationForm(request=request, data=request.POST)
+        # if form.is_valid():
+        #     username = form.cleaned_data.get('username')
+        #     password = form.cleaned_data.get('password')
+        #     user = authenticate(username=username, password=password)
+        #     if user is not None:
+        #         login(request, user)
+        #         messages.info(request, f"You are now logged in as {username}")
+        #         return redirect('blog:home')
+
         else:
             messages.error(request, "Invalid username or password.")
             return HttpResponse("please check your credential")
     else:
+        form = LoginForm()
         return render(request, 'login.html.j2', {'form': form})
 
 
@@ -61,7 +86,7 @@ def main(request):
 def logout_view(request):
     logout(request)
     messages.info(request, "Logged out successfully!")
-    return redirect("blog:home")
+    return redirect("blog:login")
 
 
 def post_view_form(request):
@@ -117,6 +142,7 @@ def search(request):
         return HttpResponse('search not found')
 
 
+@login_required
 def categories(request, pk):
     cat = Post.objects.filter(category_id=pk)
     return render(request, 'base.html.j2', {'cat': cat})

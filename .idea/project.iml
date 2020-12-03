@@ -24,6 +24,7 @@
     <option name="TEMPLATE_FOLDERS">
       <list>
         <option value="$MODULE_DIR$/blog/jinja2" />
+        <option value="$MODULE_DIR$/account/jinja2" />
       </list>
     </option>
   </component>
