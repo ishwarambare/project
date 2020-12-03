@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -85,16 +86,29 @@ def home(request):
     page = request.GET.get('page', 1)
     paginator = Paginator(post, 2)
     form = PostForm()
+
     try:
         post = paginator.page(page)
     except PageNotAnInteger:
         post = paginator.page(1)
     except EmptyPage:
         post = paginator.page(paginator.num_pages)
-    return render(request, 'list.html.j2', {'post': post, 'page': page, 'form': form})
+    return render(request, 'list.html.j2', {'post': post,
+                                            'page': page,
+                                            'form': form,
+                                            })
+
+
+# def search(request):
+#     user_list = Post.objects.all()
+#     user_filter = PostFilter(request.GET, queryset=user_list)
+#     return render(request, 'search_list.html.j2', {'filter': user_filter})
 
 
 def search(request):
-    user_list = Post.objects.all()
-    user_filter = PostFilter(request.GET, queryset=user_list)
-    return render(request, 'search_list.html.j2', {'filter': user_filter})
+    if request.method == 'GET':
+        search_name = request.GET.get('search')
+        status = Post.objects.filter(Q(name__icontains=search_name) | Q(description__icontains=search_name))
+        return render(request, "search_list.html.j2", {"books": status})
+    else:
+        return HttpResponse('search not found')

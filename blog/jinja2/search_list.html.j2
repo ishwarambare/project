@@ -1,12 +1,39 @@
 {% extends 'base.html.j2' %}
-{% block body %}
-    <form method="get">
-        {{ filter.form.as_p() }}
-        <button type="submit">Search</button>
-    </form>
-    <ul>
-        {% for user in filter.qs %}
-            <li>{{ user.name }} - {{ user.description }}</li>
-        {% endfor %}
-    </ul>
+{#{% block body %}#}
+{#    <form method="get">#}
+{#        {{ filter.form.as_p() }}#}
+{#        <button type="submit">Search</button>#}
+{#    </form>#}
+{#    <ul>#}
+{#        {% for user in filter.qs %}#}
+{#            <li>{{ user.name }} - {{ user.description }}</li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
+{#{% endblock %}#}
+
+{#{% block search %}#}
+
+{% block search %}
+
+   {% if books %}
+    {% for i in books %}
+    <div class="card mb-3">
+        {% if i.image %}
+            <img class="card-img-top" style="width: auto; height: 195px;" src="{{i.image.url}}" alt="not availabe">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{i.name}}</h5>
+            <p class="card-text">{{ i.description }}</p>
+            <p class="card-text"><small class="text-muted">Last updated {{i.created_at}} mins ago</small></p>
+        </div>
+    </div>
+   {% endfor %}
+    {% else %}
+        <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">No Data</h5>
+            <p class="card-text">Please search proper</p>
+        </div>
+    </div>
+   {% endif %}
 {% endblock %}

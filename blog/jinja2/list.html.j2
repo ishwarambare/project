@@ -1,7 +1,6 @@
 {% extends 'base.html.j2' %}
 {% block body %}
 
-
 {#    {% for i in post %}#}
 {#        {{ i.name }}#}
 {#        {{ i.category }}#}
@@ -15,7 +14,6 @@
 {% if i.image %}
     <img class="card-img-top" style="width: auto; height: 195px;" src="{{i.image.url}}" alt="not availabe">
 {% endif %}
-{#   <img class="card-img-top" src=".../100px180/" alt="Card image cap">#}
    <div class="card-body">
     <h5 class="card-title">{{i.name}}</h5>
     <p class="card-text">{{ i.description }}</p>
@@ -23,6 +21,7 @@
   </div>
 </div>
 {% endfor %}
+
 {% if post.has_other_pages %}
 <div class="pagination">
     <span class="step-links">
