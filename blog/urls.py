@@ -10,6 +10,7 @@ urlpatterns = [
     path('', views.home, name="home"),
     path('form/', views.post_view_form, name="form"),
     path('search/', views.search, name="search"),
+    path('categories/<int:pk>', views.categories, name="categories"),
 
 
 ]

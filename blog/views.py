@@ -10,7 +10,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth import authenticate
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from blog.models import Post
+from blog.models import Post, Category
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from .filters import PostFilter
@@ -93,9 +93,12 @@ def home(request):
         post = paginator.page(1)
     except EmptyPage:
         post = paginator.page(paginator.num_pages)
+
+    cat = Category.objects.all()
     return render(request, 'list.html.j2', {'post': post,
                                             'page': page,
                                             'form': form,
+                                            'cat': cat,
                                             })
 
 
@@ -112,3 +115,8 @@ def search(request):
         return render(request, "search_list.html.j2", {"books": status})
     else:
         return HttpResponse('search not found')
+
+
+def categories(request, pk):
+    cat = Post.objects.filter(category_id=pk)
+    return render(request, 'base.html.j2', {'cat': cat})

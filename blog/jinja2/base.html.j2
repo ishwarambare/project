@@ -29,9 +29,14 @@
 
 <div class="container" style="margin-top: 50px">
     <div class="row">
+
         <div class="col-2 mr-auto">
+
             <div class="alert alert-success" role="alert" style="min-height: 850px">
-                this is category
+            <h6><strong>This are some blog categories</strong></h6>
+                {% for foo in cat %}
+                    <ul><a href="{{ url('blog:categories' ,kwargs={'pk':foo.pk}) }}">{{ foo.name }}</a></ul>
+                {% endfor %}
             </div>
         </div>
 
@@ -42,6 +47,12 @@
 
             {% block search %}
             {% endblock %}
+
+            {% block cat %}
+                {% include 'cat.html.j2' %}
+            {% endblock %}
+
+
         </div>
 
         <div class="col-lg-4">

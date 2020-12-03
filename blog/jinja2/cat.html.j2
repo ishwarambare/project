@@ -1,0 +1,12 @@
+{% for i in cat %}
+<div class="card mb-3">
+{% if i.image %}
+    <img class="card-img-top" style="width: auto; height: 195px;" src="{{i.image.url}}" alt="not availabe">
+{% endif %}
+   <div class="card-body">
+    <h5 class="card-title">{{i.name}}</h5>
+    <p class="card-text">{{ i.description }}</p>
+    <p class="card-text"><small class="text-muted">Last updated {{i.created_at}} mins ago</small></p>
+  </div>
+</div>
+{% endfor %}
