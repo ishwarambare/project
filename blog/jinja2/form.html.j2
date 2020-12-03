@@ -1,8 +1,6 @@
-{% extends 'base.html.j2' %}
-{% block body %}
-    <form action="" method="post">
+<h5>Add blog</h5>
+<form action="{{ url('blog:form') }}" method="post" enctype="multipart/form-data">
     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
     {{as_crispy(form)}}
-        <button type="submit">Upload your post</button>
-    </form>
-{% endblock %}
+    <button type="submit">Upload your post</button>
+</form>

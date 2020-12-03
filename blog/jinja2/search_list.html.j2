@@ -1,0 +1,12 @@
+{% extends 'base.html.j2' %}
+{% block body %}
+    <form method="get">
+        {{ filter.form.as_p() }}
+        <button type="submit">Search</button>
+    </form>
+    <ul>
+        {% for user in filter.qs %}
+            <li>{{ user.name }} - {{ user.description }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

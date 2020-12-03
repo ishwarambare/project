@@ -39,7 +39,6 @@ class Post(Base):
         return f"{self.name}"
 
 
-
 class Comment(Base):
     comment = models.CharField(max_length=500)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)

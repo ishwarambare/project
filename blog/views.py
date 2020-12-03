@@ -2,12 +2,17 @@ from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.urls import reverse
+
 from blog.forms import UserForm, PostForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth import authenticate
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from blog.models import Post
+from django.contrib.auth.models import User
+from django.shortcuts import render
+from .filters import PostFilter
 
 
 def signup(request):
@@ -60,20 +65,36 @@ def logout_view(request):
 
 def post_view_form(request):
     if request.method == 'POST':
-        pass
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = request.user
+            profile.save()
+            return redirect('blog:home')
+        else:
+            # return HttpResponseRedirect(reverse('blog:home')
+            # form = PostForm()
+            return redirect('blog:home')
+            # return render(request, 'list.html.j2', {'form': form})
     else:
-        form = PostForm()
-        return render(request, 'form.html.j2', {'form': form})
+        return render(request, 'list.html.j2')
 
 
 def home(request):
     post = Post.objects.all()
     page = request.GET.get('page', 1)
     paginator = Paginator(post, 2)
+    form = PostForm()
     try:
         post = paginator.page(page)
     except PageNotAnInteger:
         post = paginator.page(1)
     except EmptyPage:
         post = paginator.page(paginator.num_pages)
-    return render(request, 'list.html.j2', {'post': post,  'page': page})
+    return render(request, 'list.html.j2', {'post': post, 'page': page, 'form': form})
+
+
+def search(request):
+    user_list = Post.objects.all()
+    user_filter = PostFilter(request.GET, queryset=user_list)
+    return render(request, 'search_list.html.j2', {'filter': user_filter})
