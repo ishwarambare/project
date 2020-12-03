@@ -7,11 +7,11 @@
       Please try again.
     </p>
   {% else %}
-    <p>if you dont have an account<a href="{{ url("blog:signup") }}">register here</a></p>
+    <p>if you dont have an account<a class="btn btn-outline-success my-2 my-sm-0" href="{{ url("blog:signup") }}">SignUp</a></p>
   {% endif %}
   <div class="login-form">
     <form action="{{ url('account:login') }}" method="post">
-      {{ form }}
+      {{ as_crispy(form) }}
           <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
       <input type="hidden" name="next" value="{{ next }}" />
       <p><input type="submit" value="Log-in"></p>
