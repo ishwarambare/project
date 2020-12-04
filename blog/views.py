@@ -169,11 +169,11 @@ def home(request, pk=None):
         except EmptyPage:
             post = paginator.page(paginator.num_pages)
 
-        cat = Category.objects.all()
+
         return render(request, 'list.html.j2', {'post': post,
                                                 'page': page,
                                                 'form': form,
-                                                'cat': cat,
+
                                                 'category': category,
                                                 'categories': categories,
                                                 })

@@ -26,20 +26,21 @@
 
 
 {#        {% with likes=i.user_likes.count ,user_likes=i.user_likes.all %}#}
-            {{ i.user_likes.count() }}<br>
-            {{ i.user_likes.all() }}<br>
-        <span class="count">
-          <span class="total">{{ i.likes }}</span>
-          like{{ i.likes }}
-        </span>
 
-        <a href="#" data-id="{{ i.id }}" data-action="{% if request.user in user_likes %}un{% endif %}like" class="like button">
-          {% if request.user not in user_likes %}
-            Like
-          {% else %}
-            Unlike
-          {% endif %}
-        </a>
+            <p>Likes:  {{ i.user_likes.count() }}</p><br>
+{#            {{ i.user_likes.all() }}<br>#}
+{#        <span class="count">#}
+{#          <span class="total">{{ i.likes }}</span>#}
+{#          like{{ i.likes }}#}
+{#        </span>#}
+{##}
+{#        <a href="#" data-id="{{ i.id }}" data-action="{% if request.user in user_likes %}un{% endif %}like" class="like button">#}
+{#          {% if request.user not in user_likes %}#}
+{#            Like#}
+{#          {% else %}#}
+{#            Unlike#}
+{#          {% endif %}#}
+{#        </a>#}
 
 
 
