@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.urls import path
 from . import views
 app_name = 'blog'
@@ -11,7 +12,17 @@ urlpatterns = [
     path('form/', views.post_view_form, name="form"),
     path('search/', views.search, name="search"),
     path('categories/<int:pk>', views.categories, name="categories"),
+    # path('like/<int:post_id>', views.like, name="like"),
+    path('like/', views.image_like, name="like"),
 
+
+    path('detail/<pk>', views.detailview, name="detail"),
+
+    path('detail/<pk>/like/', views.PostLikeToggle.as_view(), name='like-toggle'),
+
+    # path('<postid>/like/<userpreference>', views.like, name="like"),
+
+    # path(r'^(?P<postid>\d+)/preference/(?P<userpreference>\d+)/$', postpreference, name='postpreference'),
 
 ]
 

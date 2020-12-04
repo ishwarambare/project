@@ -1,0 +1,9 @@
+{% extends "base.html.j2" %}
+{% block body %}
+  <h1>Sign up</h1>
+  <form method="post">
+    {{ as_crispy(user_form) }}
+  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    <p><input type="submit" value="Create my account"></p>
+  </form>
+{% endblock %}

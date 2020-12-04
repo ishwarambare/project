@@ -17,7 +17,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
-from .forms import LoginForm
+from .forms import LoginForm, UserRegistrationForm
 # Create your views here.
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -45,3 +45,18 @@ def user_login(request):
         form = LoginForm()
     return render(request, 'registration/login.html.j2', {'form': form})
 
+
+def register(request):
+    if request.method == 'POST':
+        user_form = UserRegistrationForm(request.POST)
+        if user_form.is_valid():
+            new_user = user_form.save(commit=False)
+            new_user.set_password(
+                user_form.cleaned_data['password'])
+            new_user.save()
+            # User.objects.create(user=new_user)
+            return redirect('blog:login')
+            # return render(request, 'registration/register_done.html', {'new_user': new_user})
+    else:
+        user_form = UserRegistrationForm()
+    return render(request, 'registration/register.html.j2', {'user_form': user_form})

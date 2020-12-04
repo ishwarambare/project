@@ -1,0 +1,13 @@
+{% extends 'base.html.j2' %}
+{% block body %}
+
+        {{ post.name }}<br>
+        {{ post.category }}<br>
+        {{ post.description }}<br>
+        {{ post.image }}<br>
+        {{post.created_at}}<br>
+{#        <p>Like: {{ post.user_likes.count() }}<a href="{{ post.get_like_url() }}">like hear</a></p><br>#}
+        <p>Like: {{ post.user_likes.count() }}</p><a href="{{ post.get_like_url() }}">like hear</a>
+
+{% endblock %}
+
