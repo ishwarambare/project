@@ -1,13 +1,29 @@
 {% extends 'base.html.j2' %}
 {% block body %}
 
-        {{ post.name }}<br>
-        {{ post.category }}<br>
-        {{ post.description }}<br>
-        {{ post.image }}<br>
-        {{post.created_at}}<br>
+<h1>Detail Page</h1>
+    <div class="card mb-3">
+    {% if post.image %}
+    <img class="card-img-top" style="width: auto; height: 195px;" src="{{post.image.url}}" alt="not availabe">
+{% endif %}
+{#  <img class="card-img-top" src="..." alt="Card image cap">#}
+  <div class="card-body">
+    <h5 class="card-title">{{ post.name }}</h5>
+    <h5 class="card-title"><h6>category: {{ post.category }}</h6></h5>
+    <p class="card-text">{{ post.description }}<br>
+</p>
+    <p class="card-text"><small class="text-muted">{{post.created_at}}</small></p>
+        <p>Like: {{ post.user_likes.count() }}</p><a class="btn btn-success" href="{{ post.get_like_url() }}">like hear</a>
+  </div>
+</div>
+
+{#        {{ post.name }}<br>#}
+{#        {{ post.category }}<br>#}
+{#        {{ post.description }}<br>#}
+{#        {{ post.image }}<br>#}
+{#        {{post.created_at}}<br>#}
 {#        <p>Like: {{ post.user_likes.count() }}<a href="{{ post.get_like_url() }}">like hear</a></p><br>#}
-        <p>Like: {{ post.user_likes.count() }}</p><a href="{{ post.get_like_url() }}">like hear</a>
+{#        <p>Like: {{ post.user_likes.count() }}</p><a  href="{{ post.get_like_url() }}">like hear</a>#}
 
 {% endblock %}
 

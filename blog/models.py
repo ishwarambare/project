@@ -22,6 +22,9 @@ class Category(Base):
     def get_absolute_url(self):
         return reverse('blog:categories', args=[self.pk], )
 
+    def get_category_url(self):
+        return reverse('blog:post_category', args=[self.pk])
+
 
 class Tag(Base):
     name = models.CharField(max_length=100)

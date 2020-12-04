@@ -128,27 +128,55 @@ def post_view_form(request):
     else:
         return render(request, 'list.html.j2')
 
-
-def home(request):
+@login_required
+def home(request, pk=None):
     post = Post.objects.all()
-    page = request.GET.get('page', 1)
-    paginator = Paginator(post, 2)
-    form = PostForm()
+    categories = Category.objects.all()
+    category = None
+    if pk:
+        category = get_object_or_404(Category, pk=pk)
+        post = Post.objects.filter(category=category)
 
-    try:
-        post = paginator.page(page)
-    except PageNotAnInteger:
-        post = paginator.page(1)
-    except EmptyPage:
-        post = paginator.page(paginator.num_pages)
+        page = request.GET.get('page', 1)
+        paginator = Paginator(post, 2)
+        form = PostForm()
 
-    cat = Category.objects.all()
-    return render(request, 'list.html.j2', {'post': post,
-                                            'page': page,
-                                            'form': form,
-                                            'cat': cat,
-                                            # "likes": Like.objects.all(),
-                                            })
+        try:
+            post = paginator.page(page)
+        except PageNotAnInteger:
+            post = paginator.page(1)
+        except EmptyPage:
+            post = paginator.page(paginator.num_pages)
+
+        cat = Category.objects.all()
+        return render(request, 'list.html.j2', {'post': post,
+                                                'page': page,
+                                                'form': form,
+                                                'cat': cat,
+                                                'category': category,
+                                                'categories': categories,
+                                                })
+    else:
+        post = Post.objects.all()
+        page = request.GET.get('page', 1)
+        paginator = Paginator(post, 2)
+        form = PostForm()
+
+        try:
+            post = paginator.page(page)
+        except PageNotAnInteger:
+            post = paginator.page(1)
+        except EmptyPage:
+            post = paginator.page(paginator.num_pages)
+
+        cat = Category.objects.all()
+        return render(request, 'list.html.j2', {'post': post,
+                                                'page': page,
+                                                'form': form,
+                                                'cat': cat,
+                                                'category': category,
+                                                'categories': categories,
+                                                })
 
 
 # def search(request):

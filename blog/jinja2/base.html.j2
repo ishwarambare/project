@@ -46,12 +46,62 @@
         <div class="col-2 mr-auto">
 
             <div class="alert alert-success" role="alert" style="min-height: 850px">
-            <h6><strong>This are some blog categories</strong></h6>
+            <h6><strong>These are some blog categories</strong></h6>
                 {% for foo in cat %}
                     <ul><a href="{{ url('blog:categories' ,kwargs={'pk':foo.pk}) }}">{{ foo.name }}</a></ul>
                 {% endfor %}
+
+
+{#          <div id="sidebar">#}
+{#            <h3>Categories</h3>#}
+          <h6><strong>These are some blog categories</strong></h6>
+            <ul>
+              <li {% if not category %}class="selected"{% endif %}><a href="{{ url ("blog:home") }}">All</a></li>
+              {% for c in categories %}
+                <li {% if category.slug == c.pk %}class="selected"{% endif %}>
+                  <a href="{{ c.get_category_url() }}">{{ c.name }}</a>
+{#                </li>#}
+              {% endfor %}
+            </ul>
+{#          </div>#}
+{##}
             </div>
+{##}
+{#          <div id="main" class="product-list">#}
+{#            <h1>{% if category %}{{ category.name }}{% else %}Products{% endif %}</h1>#}
+{#            {% for product in products %}#}
+{#              <div class="item">#}
+{#                <a href="{{ product.get_absolute_url() }}">#}
+{#                  <img src="{% if post.image %}{{ post.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">#}
+{#                src="{{i.image.url}}#}
+{#                </a>#}
+{#                <a href="{{ post.get_absolute_url }}">{{ post.name }}</a>#}
+{#                <br>#}
+{#                Rs.{{ post.price }}#}
+{#              </div>#}
+{#            {% endfor %}#}
+{#          </div>#}
+
+
+
+
+
+
+
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         <div class="col-lg-6">
 
