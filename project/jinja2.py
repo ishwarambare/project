@@ -9,6 +9,7 @@ def environment(**options):
     env.globals.update({
         'static': staticfiles_storage.url,
         "as_crispy": as_crispy_form,
+        'as_crispy_field':as_crispy_field,
         'url': reverse,
     })
 

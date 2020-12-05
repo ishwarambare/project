@@ -1,6 +1,6 @@
 {% extends "base.html.j2" %}
 {% block body %}
-    <form action="" method="post">
+    <form action="{{url('account:login')}}" method="post">
     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
     {{ as_crispy(form) }}
     <button class="btn btn-primary" type="submit">login</button>

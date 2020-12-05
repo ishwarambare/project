@@ -27,7 +27,6 @@ urlpatterns = [
     path('detail/<pk>/like/', views.PostLikeToggle.as_view(), name='like-toggle'),
 
     # path('<postid>/like/<userpreference>', views.like, name="like"),
-
     # path(r'^(?P<postid>\d+)/preference/(?P<userpreference>\d+)/$', postpreference, name='postpreference'),
 
 ]

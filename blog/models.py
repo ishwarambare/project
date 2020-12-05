@@ -13,7 +13,7 @@ class Base(models.Model):
 
 class Category(Base):
     name = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200, null=True,blank=True)
     short_description = models.CharField(blank=True, null=True, max_length=2000)
 
     def __str__(self):
@@ -33,14 +33,14 @@ class Tag(Base):
 class Post(Base):
     name = models.CharField(max_length=500)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    slug = models.CharField(max_length=500, unique=True)
+    slug = models.CharField(max_length=500, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField(max_length=2000, null=True, blank=True)
     image = models.ImageField(upload_to='images/', null=True, blank=True)
     is_active = models.BooleanField(default=True)
-    post = models.ManyToManyField(Tag, null=True, blank=True)
+    tag = models.ManyToManyField(Tag,blank=True)
     likes = models.PositiveIntegerField(default=0)
-    user_likes = models.ManyToManyField(User, related_name='user_likes', null=True, blank=True)
+    user_likes = models.ManyToManyField(User, related_name='user_likes', blank=True)
 
     def __str__(self):
         return f"{self.name}"
@@ -66,6 +66,3 @@ class Like(models.Model):
 
     def __str__(self):
         return f"{self.user} liked {self.post}"
-
-    class Meta:
-        unique_together = ("user", "post", "value")

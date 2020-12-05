@@ -11,5 +11,8 @@ urlpatterns = [
     # path('signup/', views.SignUpView.as_view({'post': 'signup'})),
     path('signup/', views.sign_up_view.as_view()),
     path('search/', views.SearchPost.as_view()),
+    path('post-detail/<int:pk>', views.post_detail),
+
+    path('post-uplode', views.PostUplodeView.as_view(), name='post-uplode'),
 
 ]

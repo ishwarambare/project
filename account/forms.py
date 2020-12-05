@@ -15,10 +15,17 @@ class UserRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username',  'email')
+        fields = ('username', 'email')
 
     def clean_password2(self):
         cd = self.cleaned_data
         if cd['password'] != cd['password2']:
-            raise forms.ValidationError('Passwords don\'t match.')
+            raise forms.ValidationError('Passwords don\'t match. please try again')
         return cd['password2']
+
+    def clean_username(self):
+        cd = self.cleaned_data
+        if cd['username'] == '':
+            raise forms.ValidationError('Please fill some thing here')
+        return cd['username']
+
