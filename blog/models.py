@@ -13,7 +13,7 @@ class Base(models.Model):
 
 class Category(Base):
     name = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=200, null=True,blank=True)
+    slug = models.SlugField(max_length=200, null=True, blank=True)
     short_description = models.CharField(blank=True, null=True, max_length=2000)
 
     def __str__(self):
@@ -29,6 +29,9 @@ class Category(Base):
 class Tag(Base):
     name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Post(Base):
     name = models.CharField(max_length=500)
@@ -38,8 +41,7 @@ class Post(Base):
     description = models.TextField(max_length=2000, null=True, blank=True)
     image = models.ImageField(upload_to='images/', null=True, blank=True)
     is_active = models.BooleanField(default=True)
-    tag = models.ManyToManyField(Tag,blank=True)
-    likes = models.PositiveIntegerField(default=0)
+    tag = models.ManyToManyField(Tag, blank=True)
     user_likes = models.ManyToManyField(User, related_name='user_likes', blank=True)
 
     def __str__(self):
@@ -50,19 +52,3 @@ class Post(Base):
 
     def get_like_url(self):
         return reverse("blog:like-toggle", kwargs={"pk": self.pk})
-
-
-class Comment(Base):
-    comment = models.CharField(max_length=500)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-
-class Like(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="users")
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="posts")
-    value = models.IntegerField()
-    alreadyLiked = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"{self.user} liked {self.post}"

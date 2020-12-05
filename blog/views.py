@@ -1,54 +1,22 @@
 from django.contrib import messages
+from django.contrib.auth import login, authenticate
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 from django.views.generic import RedirectView
 
-from blog.forms import UserForm, PostForm
-from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth import authenticate
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-
-from blog.models import Post, Category, Like
-from django.contrib.auth.models import User
-from django.shortcuts import render
-from .filters import PostFilter
-from django.http import HttpResponse
-from django.shortcuts import render
-from django.contrib.auth import authenticate, login
+from blog.forms import PostForm
+from blog.models import Post, Category
 from .forms import LoginForm
-
-from django.contrib.auth.forms import UserCreationForm
-
-# def signup(request):
-#     if request.method == 'POST':
-#         # form = UserForm(request.POST)
-#         form = UserCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             print(user)
-#             # user.set_password(user.password)
-#             user.save()
-#             username = form.cleaned_data['username']
-#             password = form.cleaned_data['password']
-#             user = authenticate(request, username=username, password=password)
-#             login(request, user)
-#             return redirect('blog:login')
-#         else:
-#             return HttpResponse('please check the credential')
-#     else:
-#         # form = UserForm()
-#         creation_form = UserCreationForm()
-#         return render(request, 'signup.html.j2', {'form': creation_form})
-
-
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect
 
 
 def signup(request):
@@ -83,17 +51,6 @@ def login_view(request):
                 return redirect('blog:home')
             else:
                 return HttpResponse('Disabled account')
-
-        # form = AuthenticationForm(request=request, data=request.POST)
-        # if form.is_valid():
-        #     username = form.cleaned_data.get('username')
-        #     password = form.cleaned_data.get('password')
-        #     user = authenticate(username=username, password=password)
-        #     if user is not None:
-        #         login(request, user)
-        #         messages.info(request, f"You are now logged in as {username}")
-        #         return redirect('blog:home')
-
         else:
             messages.error(request, "Invalid username or password.")
             return HttpResponse("please check your credential")
@@ -121,12 +78,10 @@ def post_view_form(request):
             profile.save()
             return redirect('blog:home')
         else:
-            # return HttpResponseRedirect(reverse('blog:home')
-            # form = PostForm()
             return redirect('blog:home')
-            # return render(request, 'list.html.j2', {'form': form})
     else:
         return render(request, 'list.html.j2')
+
 
 @login_required
 def home(request, pk=None):
@@ -169,7 +124,6 @@ def home(request, pk=None):
         except EmptyPage:
             post = paginator.page(paginator.num_pages)
 
-
         return render(request, 'list.html.j2', {'post': post,
                                                 'page': page,
                                                 'form': form,
@@ -179,10 +133,6 @@ def home(request, pk=None):
                                                 })
 
 
-# def search(request):
-#     user_list = Post.objects.all()
-#     user_filter = PostFilter(request.GET, queryset=user_list)
-#     return render(request, 'search_list.html.j2', {'filter': user_filter})
 
 
 def search(request):
@@ -212,63 +162,6 @@ def like(request, post_id):
         post.save()
         newLike.save()
         return HttpResponseRedirect(reverse('blog:home'))
-
-
-# @login_required
-# def like(request, postid, userpreference):
-#     if request.method == "POST":
-#         eachpost = get_object_or_404(Post, id=postid)
-#         obj = ''
-#         valueobj = ''
-#         try:
-#             obj = Like.objects.get(user=request.user, post=eachpost)
-#             valueobj = obj.value  # value of userpreference
-#             valueobj = int(valueobj)
-#             userpreference = int(userpreference)
-#             if valueobj != userpreference:
-#                 obj.delete()
-#                 upref = Like()
-#                 upref.user = request.user
-#                 upref.post = eachpost
-#                 upref.value = userpreference
-#                 if userpreference == 1 and valueobj != 1:
-#                     eachpost.likes += 1
-#                 upref.save()
-#                 eachpost.save()
-#                 context = {'eachpost': eachpost,
-#                            'postid': postid}
-#                 return render(request, 'list.html.j2', context)
-#             elif valueobj == userpreference:
-#                 obj.delete()
-#
-#                 if userpreference == 1:
-#                     eachpost.likes -= 1
-#
-#                     eachpost.save()
-#
-#                 context = {
-#                     'eachpost': eachpost,
-#                     'postid': postid,
-#                     }
-#                 return render(request, 'list.html.j2', context)
-#         except:
-#             upref = Like()
-#             upref.user = request.user
-#             upref.post = eachpost
-#             upref.value = userpreference
-#             userpreference = int(userpreference)
-#             if userpreference == 1:
-#                 eachpost.likes += 1
-#             upref.save()
-#             eachpost.save()
-#             context = {'eachpost': eachpost,
-#                        'postid': postid}
-#             return render(request, 'list.html.j2', context)
-#     else:
-#         eachpost = get_object_or_404(Post, id=postid)
-#         context = {'eachpost': eachpost,
-#                    'postid': postid}
-#         return render(request, 'list.html.j2', context)
 
 
 # from common.decorators import ajax_required

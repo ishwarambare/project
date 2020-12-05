@@ -11,14 +11,10 @@
     <h5 class="card-title">{{ post.name }}</h5>
     <h5 class="card-title"><h6>category: {{ post.category }}</h6></h5>
     <p class="card-text">{{ post.description }}<br>
-</p>
     <p class="card-text"><small class="text-muted">{{post.created_at}}</small></p>
 
-{#      {% if request.user in post.user_likes() %}#}
           <p>Like: {{ post.user_likes.count() }}</p><a class="btn btn-success" href="{{ post.get_like_url() }}">like</a>
-{#      {% else %}#}
-          <p>Like: {{ post.user_likes.count() }}</p><a class="btn btn-success" href="{{ post.get_like_url() }}">dislike</a>
-{#      {% endif %}#}
+{#          <p>Like: {{ post.user_likes.count() }}</p><a class="btn btn-success" href="{{ post.get_like_url() }}">dislike</a>#}
 
   </div>
 </div>
@@ -31,5 +27,13 @@
 {#        <p>Like: {{ post.user_likes.count() }}<a href="{{ post.get_like_url() }}">like hear</a></p><br>#}
 {#        <p>Like: {{ post.user_likes.count() }}</p><a  href="{{ post.get_like_url() }}">like hear</a>#}
 
+
+
+{#    {% for foo in post.tag() %}#}
+{#        {{ foo }}#}
+{#    {% endfor %}#}
+
+    <p class="card-text">Tags: <strong>{% for foo in post.tag.all() %}{{ foo }},{% endfor %}</strong>
+    <br></p>
 {% endblock %}
 
