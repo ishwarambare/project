@@ -7,7 +7,8 @@ from rest_framework import serializers
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['name']
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -17,18 +18,12 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class PostSerializers(serializers.ModelSerializer):
-    category = CategorySerializer()
-    # user_likes = serializers.SerializerMethodField('get_user_likes')
-
-    # user_likes = UserSerializer()
+    # category = CategorySerializer()
+    tag = serializers.StringRelatedField(read_only=True, many=True)
 
     class Meta:
         model = Post
         fields = '__all__'
-
-    # def get_user_likes(self,obj):
-    #     user_objects_filter = User.objects.filter(username=obj)
-    #     return user_objects_filter
 
 
 class SignUpSerializer(serializers.ModelSerializer):

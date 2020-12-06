@@ -15,4 +15,7 @@ urlpatterns = [
 
     path('post-uplode', views.PostUplodeView.as_view(), name='post-uplode'),
 
+    path('post-uplode-new/', views.PostApiUplode.as_view(), name='post-uplode-new'),
+
+
 ]
