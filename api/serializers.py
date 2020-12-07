@@ -1,7 +1,13 @@
-from api.views import User
-from blog.models import *
-from account.models import *
 from rest_framework import serializers
+
+from api.views import User
+from blog.models import Category, Post, Tag
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -19,7 +25,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class PostSerializers(serializers.ModelSerializer):
     # category = CategorySerializer()
-    tag = serializers.StringRelatedField(read_only=True, many=True)
+    tag = TagSerializer(many=True)
 
     class Meta:
         model = Post
