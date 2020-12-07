@@ -23,7 +23,7 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         # fields = '__all__'
-        exclude=['slug','likes','user_likes','post','user']
+        exclude = ['slug', 'likes', 'user_likes', 'post', 'user', 'tag']
 
 
 class LoginForm(forms.Form):
