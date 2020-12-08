@@ -1,6 +1,6 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from api.views import User
 from blog.models import Category, Post, Tag
 
 
@@ -25,7 +25,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class PostSerializers(serializers.ModelSerializer):
     # category = CategorySerializer()
-    tag = TagSerializer(many=True)
+    tag = TagSerializer(many=True, required=False)
 
     class Meta:
         model = Post

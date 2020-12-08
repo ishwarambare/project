@@ -1,15 +1,12 @@
 from django.contrib import messages
-from django.contrib.auth import login, authenticate
-from django.contrib.auth import logout
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 from django.views.generic import RedirectView
@@ -131,8 +128,6 @@ def home(request, pk=None):
                                                 'category': category,
                                                 'categories': categories,
                                                 })
-
-
 
 
 def search(request):

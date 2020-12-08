@@ -1,30 +1,14 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import render
-from rest_framework import status, generics
+from rest_framework import generics, viewsets, status
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from blog.models import *
-from account.models import *
-from api.serializers import *
-from django.contrib.auth import authenticate, login
-from rest_framework.views import APIView
-from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import status
-from .serializers import PostSerializers
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.decorators import api_view, authentication_classes, permission_classes, parser_classes
-from django.conf import settings
-from django.contrib.auth import get_user_model
 
-from rest_framework.parsers import MultiPartParser, FileUploadParser
-from .models import *
-from .serializers import *
-
-User = get_user_model()
+from blog.models import Post, Category
+from .serializers import PostSerializers, CategorySerializer, SignUpSerializer
 
 
 def home(request):
@@ -52,7 +36,6 @@ class CategoryView(APIView):
 
 
 class LoginView(viewsets.ViewSet):
-    # authentication_classes = (BasicAuthentication)
     authentication_classes = ()
     permission_classes = ()
 
@@ -60,14 +43,7 @@ class LoginView(viewsets.ViewSet):
         username = request.data.get('username')
         password = request.data.get('password')
         try:
-            # if is_email(username):
-            #     user = get_user_model().objects.get(email=username)
-            #     username = user.username
-            # if is_mobile(username):
-            #     profile = Profile.objects.get(mobile=username)
-            #     username = profile.user.username
             username = User.objects.get(username=username)
-            print(username)
         except Exception:
             return Response(data={'status': False, 'message': 'Invalid Credential'}, status=status.HTTP_400_BAD_REQUEST)
         user = authenticate(username=username, password=password)
@@ -184,6 +160,3 @@ class PostApiUplode(APIView):
             return Response({"result": data})
         except Exception as e:
             return Response(data={'status': False, 'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-
-

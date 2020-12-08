@@ -1,11 +1,10 @@
 {% extends "base.html.j2" %}
 {% block body %}
     <div class="col">
-      <form class="" action="{{ url('blog:signup') }}" method="post">
-{#    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">#}
-        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-    {{as_crispy(form)}}
-      <button class="btn btn-primary" type="submit">signup</button>
-  </form>
+        <form class="" action="{{ url('blog:signup') }}" method="post">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            {{ as_crispy(form) }}
+            <button class="btn btn-primary" type="submit">signup</button>
+        </form>
     </div>
 {% endblock %}

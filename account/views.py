@@ -1,10 +1,8 @@
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
-from django.shortcuts import redirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
-from .forms import LoginForm
-from .forms import UserRegistrationForm
+from .forms import LoginForm, UserRegistrationForm
 
 
 def user_login(request):
@@ -16,8 +14,6 @@ def user_login(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    # return HttpResponse('Authenticated successfully')
-                    # return redirect('blog:login')
                     return redirect('blog:home')
                 else:
                     return HttpResponse('Disabled account')
@@ -38,7 +34,6 @@ def register(request):
             new_user.save()
             # User.objects.create(user=new_user)
             return redirect('blog:login')
-            # return render(request, 'registration/register_done.html', {'new_user': new_user})
     else:
         user_form = UserRegistrationForm()
     return render(request, 'registration/register.html.j2', {'user_form': user_form})

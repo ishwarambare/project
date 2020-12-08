@@ -1,137 +1,43 @@
 {% extends 'base.html.j2' %}
 {% block body %}
 
-{#    {% for i in post %}#}
-{#        {{ i.name }}#}
-{#        {{ i.category }}#}
-{#        {{ i.description }}#}
-{#        {{ i.image }}#}
-{#        {{i.created_at}}#}
-{#    {% endfor %}#}
+    {% for i in post %}
+        <div class="card mb-3">
+            {% if i.image %}
+                <img class="card-img-top" style="width: auto; height: 195px;" src="{{ i.image.url }}"
+                     alt="not availabe">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title"><a href="{{ i.get_absolute_url() }}">{{ i.name }}</a></h5>
 
-{% for i in post %}
-<div class="card mb-3">
-{% if i.image %}
-    <img class="card-img-top" style="width: auto; height: 195px;" src="{{i.image.url}}" alt="not availabe">
-{% endif %}
-   <div class="card-body">
-    <h5 class="card-title"><a href="{{ i.get_absolute_url() }}">{{i.name}}</a></h5>
-{#           <h2><a href="{{ url ('blog:post_detail',kwargs={'year':post.publish.year,'month':post.publish.month,'day':post.publish.day,'post':post.slug}) }}">{{ post.title }}</a></h2>#}
+                <p class="card-text">{{ i.description }}</p>
+                <p class="card-text"><small class="text-muted">Last updated {{ i.created_at }} mins ago</small></p>
+            </div>
+        </div>
 
-    <p class="card-text">{{ i.description }}</p>
-    <p class="card-text"><small class="text-muted">Last updated {{i.created_at}} mins ago</small></p>
-  </div>
-</div>
+        <p>Likes: {{ i.user_likes.count() }}</p><br>
+    {% endfor %}
 
+    {% if post.has_other_pages %}
+        <div class="pagination">
+            <span class="step-links">
+                {% if post.has_previous() %}
+                    <a class="btn btn-info" href="?page={{ post.previous_page_number() }}">Previous</a>
+                {% endif %}
+                <span class="current">
+                    Page {{ post.number }} of {{ post.paginator.num_pages }}.
+                </span>
 
-
-{#        {% with likes=i.user_likes.count ,user_likes=i.user_likes.all %}#}
-
-            <p>Likes:  {{ i.user_likes.count() }}</p><br>
-{#            {{ i.user_likes.all() }}<br>#}
-{#        <span class="count">#}
-{#          <span class="total">{{ i.likes }}</span>#}
-{#          like{{ i.likes }}#}
-{#        </span>#}
-{##}
-{#        <a href="#" data-id="{{ i.id }}" data-action="{% if request.user in user_likes %}un{% endif %}like" class="like button">#}
-{#          {% if request.user not in user_likes %}#}
-{#            Like#}
-{#          {% else %}#}
-{#            Unlike#}
-{#          {% endif %}#}
-{#        </a>#}
-
-
-
-
-
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2.2.1/src/js.cookie.min.js"></script>
-    <script>
-        var csrftoken = Cookies.get('csrftoken');
-        function csrfSafeMethod(method) {
-            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-        }
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
-            }
-        });
-        $(document).ready(function(){
-
-
-                $('a.like').click(function(e){
-                    e.preventDefault();
-                    $.post('{{ url('blog:like') }}',
-                        {
-                            id: $(this).data('id'),
-                            action: $(this).data('action')
-                        },
-                        function(data){
-                        if (data['status'] == 'ok')
-                        {
-                            var previous_action = $('i.like').data('action');
-
-                            $('a.like').data('action', previous_action == 'like' ?
-                                'unlike' : 'like');
-
-                            // update total likes
-          var previous_likes = parseInt($('span.count .total').text());
-          $('span.count .total').text(previous_action == 'like' ?
-          previous_likes + 1 : previous_likes - 1);
-        }
-      }
-    );
-  });
-
-        });
-    </script>
-
-
-
-
-
-{#<a href="#" onClick="document.getElementById('likebutton').submit()">Like This Post</a> {{i.likes}}#}
-{##}
-{##}
-{#<form id="likebutton" method="POST" action="{{ url('blog:like',kwargs={'postid':i.id,'userpreference':1} )}}">#}
-{#<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">#}
-{#<input type="hidden">#}
-{#</form>#}
-
-
-
-
-
-
-
-
-{% endfor %}
-
-{% if post.has_other_pages %}
-<div class="pagination">
-    <span class="step-links">
-        {% if post.has_previous() %}
-            <a class="btn btn-info" href="?page={{ post.previous_page_number() }}">Previous</a>
-        {% endif %}
-
-    <span class="current">
-           Page {{ post.number }} of {{ post.paginator.num_pages }}.
-    </span>
-
-        {% if post.has_next() %}
-            <a class="btn btn-info" href="?page={{ post.next_page_number() }}">Next</a>
-        {% endif %}
-    </span>
-</div>
-{% endif %}
+                {% if post.has_next() %}
+                    <a class="btn btn-info" href="?page={{ post.next_page_number() }}">Next</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block form %}
-{% include 'form.html.j2' %}
+    {% include 'form.html.j2' %}
 {% endblock %}
 
 
