@@ -7,6 +7,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
+from django.template.loader import get_template
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 from django.views.generic import RedirectView
@@ -213,3 +214,64 @@ class PostLikeToggle(RedirectView):
 def detailview(request, pk):
     post = Post.objects.get(id=pk)
     return render(request, "detail.html.j2", {'post': post})
+
+
+# import cStringIO as StringIO
+# from xhtml2pdf import pisa
+# from django.template.loader import get_template
+# from django.template import Context
+# from django.http import HttpResponse
+# from cgi import escape
+#
+#
+# def render_to_pdf(template_src, context_dict):
+#     template = get_template(template_src)
+#     context = Context(context_dict)
+#     html  = template.render(context)
+#     result = StringIO.StringIO()
+#
+#     pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("ISO-8859-1")), result)
+#     if not pdf.err:
+#         return HttpResponse(result.getvalue(), content_type='application/pdf')
+#     return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
+
+
+from django.http import HttpResponse
+from django.views.generic import View
+
+from .utils import render_to_pdf
+
+import datetime
+
+
+# class GeneratePdf(View):
+#     def get(self, request, *args, **kwargs):
+#         data = {
+#             'today': datetime.date.today(),
+#             'amount': 39.99,
+#             'customer_name': 'Cooper Mann',
+#             'order_id': 1233434,
+#         }
+#         pdf = render_to_pdf('pdf/invoice.html', data)
+#         return HttpResponse(pdf, content_type='application/pdf')
+
+
+class GeneratePDF(View):
+    def get(self, request, pk, *args, **kwargs):
+        template = get_template('post.html.j2')
+        post = Post.objects.get(id=pk)
+        context = {
+            'post': post
+        }
+        html = template.render(context)
+        pdf = render_to_pdf('post.html.j2', context)
+        if pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            filename = "post_%s.pdf" % "12341231"
+            content = "inline; filename='%s'" % filename
+            download = request.GET.get("download")
+            if download:
+                content = "attachment; filename='%s'" % filename
+            response['Content-Disposition'] = content
+            return response
+        return HttpResponse("Not found")

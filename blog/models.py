@@ -52,3 +52,6 @@ class Post(Base):
 
     def get_like_url(self):
         return reverse("blog:like-toggle", kwargs={"pk": self.pk})
+
+    def get_pdf_link(self):
+        return reverse("blog:get-pdf", kwargs={"pk": self.pk})

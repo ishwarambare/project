@@ -15,7 +15,7 @@
 
             <p>Like: {{ post.user_likes.count() }}</p><a class="btn btn-success"href="{{ post.get_like_url() }}">like</a>
             {#          <p>Like: {{ post.user_likes.count() }}</p><a class="btn btn-success" href="{{ post.get_like_url() }}">dislike</a>#}
-
+            <button><a class="btn btn-success" href="{{ post.get_pdf_link() }}">Pdf</a></button>
         </div>
     </div>
 

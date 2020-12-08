@@ -25,6 +25,9 @@ urlpatterns = [
 
     path('detail/<pk>/like/', views.PostLikeToggle.as_view(), name='like-toggle'),
 
+    path('get-pdf/<pk>/', views.GeneratePDF.as_view(), name='get-pdf'),
+
+
 
 ]
 
