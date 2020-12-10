@@ -18,13 +18,30 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from blog.custome_sitemap import StaticViewSitemap, NewSiteMap, NewStaticViewSideMap
+from blog.models import Post
+
+from django.contrib.sitemaps.views import sitemap
+
+info_dict = {
+    'static': StaticViewSitemap,
+}
+
+sitemaps = {
+    "posts": NewSiteMap,
+    "static": NewStaticViewSideMap
+}
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('sitemap.xml/', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('account/', include('account.urls')),
     path('api-blog/', include('api.urls')),
     path('', include('blog.urls')),
+    # path('sitemap.xml/', sitemap, {'sitemaps': info_dict}),
 
-    path('api/v1/rest-auth/', include('rest_auth.urls')), # new
+    path('api/v1/rest-auth/', include('rest_auth.urls')),  # new
+
 ]
 
 if settings.DEBUG is True:
