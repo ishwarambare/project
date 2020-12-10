@@ -2,7 +2,11 @@
 {% block body %}
     <h1>Sign up</h1>
     <form method="post" novalidate>
-        {#    {{ as_crispy(user_form) }}#}
+{#            {{ as_crispy(user_form) }}#}
+
+
+
+
         username: {{ as_crispy_field(user_form.username) }}
         email: {{ as_crispy_field(user_form.email) }}
         password: {{ as_crispy_field(user_form.password ) }}

@@ -82,7 +82,6 @@ class SignUpView(viewsets.ViewSet):
         except Exception as e:
             return Response(data={'status': False, 'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-
 class sign_up_view(APIView):
     authentication_classes = ()
     permission_classes = ()

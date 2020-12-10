@@ -5,16 +5,17 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template.loader import get_template
 from django.urls import reverse
 from django.views.decorators.http import require_POST
-from django.views.generic import RedirectView
+from django.views.generic import RedirectView, View
 
 from blog.forms import PostForm
 from blog.models import Post, Category
 from .forms import LoginForm
+from .utils import render_to_pdf
 
 
 def signup(request):
@@ -71,7 +72,7 @@ def post_view_form(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
-            profile = form.save(commit=False)
+            profile = form.save(commit=False)  # use
             profile.user = request.user
             profile.save()
             return redirect('blog:home')
@@ -216,9 +217,7 @@ def detailview(request, pk):
     return render(request, "detail.html.j2", {'post': post})
 
 
-from django.http import HttpResponse
-from django.views.generic import View
-from .utils import render_to_pdf
+
 
 
 class GeneratePDF(View):
