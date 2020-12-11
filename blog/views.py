@@ -1,3 +1,6 @@
+import csv
+import io
+
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -5,8 +8,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
-from django.shortcuts import get_object_or_404, render, redirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import get_template
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -27,7 +30,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('blog:login')
+            return redirect('login')
     else:
         form = UserCreationForm()
     return render(request, 'signup.html.j2', {'form': form})
@@ -47,7 +50,7 @@ def login_view(request):
             if user is None:
                 print(user)
                 login(request, user)
-                return redirect('blog:home')
+                return redirect('home')
             else:
                 return HttpResponse('Disabled account')
         else:
@@ -65,7 +68,7 @@ def main(request):
 def logout_view(request):
     logout(request)
     messages.info(request, "Logged out successfully!")
-    return redirect("blog:login")
+    return redirect("login")
 
 
 def post_view_form(request):
@@ -75,9 +78,9 @@ def post_view_form(request):
             profile = form.save(commit=False)  # use
             profile.user = request.user
             profile.save()
-            return redirect('blog:home')
+            return redirect('home')
         else:
-            return redirect('blog:home')
+            return redirect('home')
     else:
         return render(request, 'list.html.j2')
 
@@ -158,7 +161,7 @@ def like(request, post_id):
         post.user_likes.add(user)
         post.save()
         newLike.save()
-        return HttpResponseRedirect(reverse('blog:home'))
+        return HttpResponseRedirect(reverse('home'))
 
 
 # from common.decorators import ajax_required
@@ -239,3 +242,57 @@ class GeneratePDF(View):
             response['Content-Disposition'] = content
             return response
         return HttpResponse("Not found")
+
+
+import xlsxwriter
+from django.shortcuts import render
+
+
+def get_xml_file(request, *args, **kwargs):
+    output = io.BytesIO()
+    workbook = xlsxwriter.Workbook(output)
+    worksheet = workbook.add_worksheet()
+    format2 = workbook.add_format({'num_format': 'dd/mm/yy'})
+    worksheet.write(1, 0, 'post title')
+    worksheet.write(1, 1, 'description')
+    worksheet.write(1, 2, 'category ')
+    worksheet.write(1, 3, 'date')
+    worksheet.write(1, 4, 'username')
+    data = Post.objects.all()
+    num = 2
+    for new in data:
+        worksheet.write(num, 0, new.name)
+        worksheet.write(num, 1, new.description)
+        worksheet.write(num, 2, new.category.name)
+        date_here = new.created_at.replace(tzinfo=None)
+        worksheet.write(num, 3, date_here, format2)
+        worksheet.write(num, 4, new.user.username)
+        num += 1
+    workbook.close()
+    output.seek(0)
+    filename = 'django_simple.xlsx'
+    response = HttpResponse(output, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    output.close()
+    return response
+
+
+def get_csv_file(request, *args, **kwargs):
+    csv_data = io.StringIO()
+    csv_writer = csv.writer(csv_data)
+    post_data = ['post title', 'description', 'category ', 'date', 'username']
+    csv_writer.writerow(post_data)
+    data = Post.objects.all()
+    for row in data:
+        csv_writer.writerow([row.name, row.description, row.category.name, row.updated_at, row.user.username])
+    csv_data.seek(0)
+    filename = 'post_simple.csv'
+    response = HttpResponse(csv_data, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    csv_data.close()
+    return response
+
+
+def fileexport(request):
+    objects_all = Post.objects.all()
+    return render(request, 'export.html.j2', {"post": objects_all})

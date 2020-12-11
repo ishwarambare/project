@@ -14,7 +14,7 @@ def user_login(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return redirect('blog:home')
+                    return redirect('home')
                 else:
                     return HttpResponse('Disabled account')
             else:
@@ -33,7 +33,7 @@ def register(request):
                 user_form.cleaned_data['password'])
             new_user.save()
             # User.objects.create(user=new_user)
-            return redirect('blog:login')
+            return redirect('login')
     else:
         user_form = UserRegistrationForm()
     return render(request, 'registration/register.html.j2', {'user_form': user_form})

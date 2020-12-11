@@ -20,10 +20,10 @@ class Category(Base):
         return f"{self.name}"
 
     def get_absolute_url(self):
-        return reverse('blog:categories', args=[self.pk], )
+        return reverse('categories', args=[self.pk], )
 
     def get_category_url(self):
-        return reverse('blog:post_category', args=[self.pk])
+        return reverse('post_category', args=[self.pk])
 
 
 class Tag(Base):
@@ -48,10 +48,10 @@ class Post(Base):
         return f"{self.name}"
 
     def get_absolute_url(self):
-        return reverse("blog:detail", kwargs={"pk": self.pk})
+        return reverse("detail", kwargs={"pk": self.pk})
 
     def get_like_url(self):
-        return reverse("blog:like-toggle", kwargs={"pk": self.pk})
+        return reverse("like-toggle", kwargs={"pk": self.pk})
 
     def get_pdf_link(self):
-        return reverse("blog:get-pdf", kwargs={"pk": self.pk})
+        return reverse("get-pdf", kwargs={"pk": self.pk})

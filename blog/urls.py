@@ -1,8 +1,6 @@
 from django.urls import path
 from . import views
 
-app_name = 'blog'
-
 urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('login/', views.login_view, name="login"),
@@ -22,5 +20,11 @@ urlpatterns = [
     path('detail/<pk>/like/', views.PostLikeToggle.as_view(), name='like-toggle'),
 
     path('get-pdf/<pk>/', views.GeneratePDF.as_view(), name='get-pdf'),
+
+    path('export/', views.fileexport, name='export'),
+
+    path('export-csv/', views.get_csv_file, name='get-csv'),
+    path('export-xml/', views.get_xml_file, name='get-xml'),
+
 
 ]

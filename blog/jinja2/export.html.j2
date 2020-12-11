@@ -1,0 +1,46 @@
+
+
+
+    <button style="color: white" class="btn btn-group-justified"><a href="{{ url('get-xml') }}">Export as xml</a></button>
+    <button style="color: white" class="btn btn-group-justified"><a href="{{ url('get-csv') }}">Export as csv</a></button>
+
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+<h2>EXPORT Table</h2>
+<table>
+  <tr>
+    <th>#</th>
+    <th>post title</th>
+    <th>description</th>
+    <th>category</th>
+    <th>date</th>
+    <th>user</th>
+  </tr>
+      {% for datum in post %}
+          <tr>
+              <td>{{ datum.id }}</td>
+              <td>{{ datum.name }}</td>
+              <td>{{ datum.description }}</td>
+              <td>{{ datum.category.name }}</td>
+              <td>{{ datum.created_at }}</td>
+              <td>{{ datum.user.username }}</td>
+          </tr>
+      {% endfor %}
+</table>
+
+
