@@ -26,7 +26,7 @@
         $("#post-form").submit(function (e) {
             e.preventDefault();
             var serializedData = $(this).serialize();
-            var csrf_token = document.querySelector(".user").getAttribute('csrftoken');
+            {#var csrf_token = document.querySelector(".user").getAttribute('csrftoken');#}
             $.ajax({
                     type: 'POST',
                     url: "{{ url('post_uplode')}}",
@@ -43,7 +43,7 @@
                         )
                     },
 
-                    headers: {'Content-Type': 'application/json', "X-CSRFToken": csrf_token},
+                    {#headers: {'Content-Type': 'application/json', "X-CSRFToken": csrf_token},#}
                 }
             )
         })
