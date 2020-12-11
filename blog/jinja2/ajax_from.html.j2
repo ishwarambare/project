@@ -12,7 +12,7 @@
             {{ as_crispy_field(form.image) }}
             {{ as_crispy_field(form.is_active) }}
             <input type="submit" class="btn btn-primary" value="Create Friend"/>
-            <form>
+        <form>
     </div>
     <hr/>
 {% endblock content %}
@@ -30,7 +30,6 @@
                     data: serializedData,
                     success: function (response) {
                         $("#post-form").trigger('reset');
-                        $("#id_name").focus();
                         var instance = JSON.parse(response["instance"]);
                         var fields = instance[0]["fields"];
                         $("#my_friends tbody").prepend(
@@ -42,29 +41,6 @@
                 }
             )
         })
-
-
-        $("#id_name").focusout(function (e) {
-            e.preventDefault();
-            var name = $(this).val();
-            $.ajax({
-                type: 'GET',
-                url: "{{ url('validate_postname') }}",
-                data: {"name": name},
-                success: function (response) {
-                    if (!response["valid"]) {
-                        alert("You cannot create a post with same name");
-                        var Name = $("#id_name");
-                        Name.val("")
-                        Name.focus()
-                    }
-                },
-                error: function (response) {
-                    console.log(response)
-                }
-            })
-        })
-
     </script>
 {% endblock javascript %}
 
