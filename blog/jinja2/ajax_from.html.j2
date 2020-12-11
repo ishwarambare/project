@@ -2,18 +2,17 @@
 
 {% block content %}
 
-    <div class="container-fluid">
+    <div class="container">
+    <div class="col-5">
         <form id="post-form">
-            <div class="row">
-                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-                {% for field in form %}
-                    <div class="form-group col-4">
-                        <label class="col-12">{{ field.label }}</label>
-                        {{ field }}
-                    </div>
-                {% endfor %}
-                <input type="submit" class="btn btn-primary" value="Create Friend"/>
-            </div>
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+{#                            {{ as_crispy(form) }}#}
+            {{ as_crispy_field(form.name) }}
+            {{ as_crispy_field(form.category) }}
+            {{ as_crispy_field(form.description ) }}
+            {{ as_crispy_field(form.image) }}
+            {{ as_crispy_field(form.is_active) }}
+            <input type="submit" class="btn btn-primary" value="Create Friend"/>
             <form>
     </div>
     <hr/>
