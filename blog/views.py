@@ -317,3 +317,12 @@ def postUplode(request):
     return JsonResponse({"error": ""}, status=400)
 
 
+def checkPostName(request):
+    if request.is_ajax and request.method == "GET":
+        post_name = request.GET.get("name", None)
+        if Post.objects.filter(name__icontains=post_name).exists():
+            return JsonResponse({"valid": False}, status=200)
+        else:
+            return JsonResponse({"valid": True}, status=200)
+    return JsonResponse({}, status=400)
+

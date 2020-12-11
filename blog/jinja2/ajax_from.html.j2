@@ -26,7 +26,7 @@
         $("#post-form").submit(function (e) {
             e.preventDefault();
             var serializedData = $(this).serialize();
-            {#var csrf_token = document.querySelector(".user").getAttribute('csrftoken');#}
+            var csrf_token = document.querySelector(".user").getAttribute('csrftoken');
             $.ajax({
                     type: 'POST',
                     url: "{{ url('post_uplode')}}",
@@ -38,19 +38,38 @@
                         var fields = instance[0]["fields"];
                         $("#my_friends tbody").prepend(
                             `<tr>
-                    <td>${fields["nick_name"] || ""}</td>
-                    <td>${fields["first_name"] || ""}</td>
-                    <td>${fields["last_name"] || ""}</td>
-                    <td>${fields["likes"] || ""}</td>
+                    <td>${fields["name"] || ""}</td>
                     </tr>`
                         )
                     },
 
-                    {#headers: {'Content-Type': 'application/json', "X-CSRFToken": csrf_token},#}
-
+                    headers: {'Content-Type': 'application/json', "X-CSRFToken": csrf_token},
                 }
             )
         })
+
+
+        $("#id_name").focusout(function (e) {
+            e.preventDefault();
+            var name = $(this).val();
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('validate_postname') }}",
+                data: {"name": name},
+                success: function (response) {
+                    if (!response["valid"]) {
+                        alert("You cannot create a post with same name");
+                        var Name = $("#id_name");
+                        Name.val("")
+                        Name.focus()
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            })
+        })
+
     </script>
 {% endblock javascript %}
 
