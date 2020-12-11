@@ -1,0 +1,56 @@
+{% extends "base_ajax.html.j2" %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        <form id="post-form">
+            <div class="row">
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                {% for field in form %}
+                    <div class="form-group col-4">
+                        <label class="col-12">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <input type="submit" class="btn btn-primary" value="Create Friend"/>
+            </div>
+            <form>
+    </div>
+    <hr/>
+{% endblock content %}
+
+
+{% block javascript %}
+    <script>
+
+        $("#post-form").submit(function (e) {
+            e.preventDefault();
+            var serializedData = $(this).serialize();
+            {#var csrf_token = document.querySelector(".user").getAttribute('csrftoken');#}
+            $.ajax({
+                    type: 'POST',
+                    url: "{{ url('post_uplode')}}",
+                    data: serializedData,
+                    success: function (response) {
+                        $("#post-form").trigger('reset');
+                        $("#id_name").focus();
+                        var instance = JSON.parse(response["instance"]);
+                        var fields = instance[0]["fields"];
+                        $("#my_friends tbody").prepend(
+                            `<tr>
+                    <td>${fields["nick_name"] || ""}</td>
+                    <td>${fields["first_name"] || ""}</td>
+                    <td>${fields["last_name"] || ""}</td>
+                    <td>${fields["likes"] || ""}</td>
+                    </tr>`
+                        )
+                    },
+
+                    {#headers: {'Content-Type': 'application/json', "X-CSRFToken": csrf_token},#}
+
+                }
+            )
+        })
+    </script>
+{% endblock javascript %}
+

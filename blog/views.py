@@ -220,9 +220,6 @@ def detailview(request, pk):
     return render(request, "detail.html.j2", {'post': post})
 
 
-
-
-
 class GeneratePDF(View):
     def get(self, request, pk, *args, **kwargs):
         template = get_template('post.html.j2')
@@ -296,3 +293,27 @@ def get_csv_file(request, *args, **kwargs):
 def fileexport(request):
     objects_all = Post.objects.all()
     return render(request, 'export.html.j2', {"post": objects_all})
+
+
+def add_blog(request):
+    form = PostForm()
+    return render(request, 'ajax_from.html.j2', {'form': form})
+
+
+from django.core import serializers
+
+
+def postUplode(request):
+    if request.is_ajax and request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.user = request.user
+            instance.save()
+            ser_instance = serializers.serialize('json', [instance, ])
+            return JsonResponse({"instance": ser_instance}, status=200)
+        else:
+            return JsonResponse({"error": form.errors}, status=400)
+    return JsonResponse({"error": ""}, status=400)
+
+

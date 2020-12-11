@@ -26,5 +26,13 @@ urlpatterns = [
     path('export-csv/', views.get_csv_file, name='get-csv'),
     path('export-xml/', views.get_xml_file, name='get-xml'),
 
+    path('add-blog/', views.add_blog, name="add-blog"),
+
+
+    path('post/ajax/post', views.postUplode, name="post_uplode"),
+
+    # path('signup-new/', views.SignUpView.as_view(), name='signup-new'),
+    #
+    # path('ajax/validate_username/', views.validate_username, name='validate_username'),
 
 ]
