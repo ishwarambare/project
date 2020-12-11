@@ -6,7 +6,6 @@
     <div class="col-5">
         <form id="post-form">
             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-{#                            {{ as_crispy(form) }}#}
             {{ as_crispy_field(form.name) }}
             {{ as_crispy_field(form.category) }}
             {{ as_crispy_field(form.description ) }}
@@ -25,7 +24,6 @@
         $("#post-form").submit(function (e) {
             e.preventDefault();
             var serializedData = $(this).serialize();
-            {#var csrf_token = document.querySelector(".user").getAttribute('csrftoken');#}
             $.ajax({
                     type: 'POST',
                     url: "{{ url('post_uplode')}}",
@@ -41,8 +39,6 @@
                     </tr>`
                         )
                     },
-
-                    {#headers: {'Content-Type': 'application/json', "X-CSRFToken": csrf_token},#}
                 }
             )
         })
