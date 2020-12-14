@@ -55,3 +55,6 @@ class Post(Base):
 
     def get_pdf_link(self):
         return reverse("get-pdf", kwargs={"pk": self.pk})
+
+    class Meta:
+        ordering = ['-created_at']

@@ -36,7 +36,7 @@
 
             {{ as_crispy_field(form.is_active) }}
 
-            <input type="submit" class="btn btn-primary" value="upload post"/>
+            <input type="submit" id="btnsave" class="btn btn-primary" value="upload post"/>
             <form>
     </div>
     <hr/>
@@ -68,24 +68,24 @@
                     $("#categorymessage").html("");
                 },
 
-                error:function (request) {
-                        console.log(request);
-                        var responseText = JSON.parse(request.responseText),
+                error: function (request) {
+                    console.log(request);
+                    var responseText = JSON.parse(request.responseText),
                         data = responseText.error.name;
-                        {#$("#namemessage").html("<div class='alert alert-success'>"+ request.responseText +"</div>");#}
+                    {#$("#namemessage").html("<div class='alert alert-success'>"+ request.responseText +"</div>");#}
 
-                        if (responseText.error.name){
-                            $("#namemessage").html("<div class='alert alert-success'>"+ responseText.error.name +"</div>");
-                        }else {
-                            $("#namemessage").html("");
+                    if (responseText.error.name) {
+                        $("#namemessage").html("<div class='alert alert-success'>" + responseText.error.name + "</div>");
+                    } else {
+                        $("#namemessage").html("");
 
-                        }
-                        if (responseText.error.category){
+                    }
+                    if (responseText.error.category) {
 
-                        $("#categorymessage").html("<div class='alert alert-success'>"+ responseText.error.category +"</div>");
-                        }else {
-                            $("#categorymessage").html("");
-                        }
+                        $("#categorymessage").html("<div class='alert alert-success'>" + responseText.error.category + "</div>");
+                    } else {
+                        $("#categorymessage").html("");
+                    }
 
 
                 }
@@ -93,9 +93,37 @@
 
             })
 
-        })
+        });
 
 
+        $("#post-form").submit(function (event) {
+            event.preventDefault();
+            console.log("ishwar !!!!!!!!!")
+            let name = $("#id_name").val();
+            let category = $("#id_category").val();
+            let description = $("#id_description").val();
+
+            let csr = $("input[name=csrfmiddlewaretoken]").val();
+            console.log(name);
+            console.log(category);
+            console.log(description);
+
+            mydata = {
+                name: name,
+                email: category,
+                password: description,
+                csrfmiddlewaretoken: csr,
+            };
+
+            $.ajax({
+                url: {{ url("get-post-list") }},
+                data: mydata,
+                method: 'POST',
+
+            })
+
+
+        });
     </script>
 {% endblock javascript %}
 

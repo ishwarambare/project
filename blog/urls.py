@@ -30,7 +30,11 @@ urlpatterns = [
 
 
     path('post/ajax/post', views.postUplode, name="post_uplode"),
-    path('get/ajax/validate/postname', views.checkPostName, name="validate_postname")
+    path('get/ajax/validate/postname', views.checkPostName, name="validate_postname"),
+
+
+
+    path('get-post-list/', views.get_post_list, name="get-post-list"),
 
 
     # path('signup-new/', views.SignUpView.as_view(), name='signup-new'),
