@@ -327,7 +327,6 @@ def checkPostName(request):
     return JsonResponse({}, status=400)
 
 
-
 # def postUplode(request):
 #     if request.method == "POST":
 #         form = PostForm(request.POST)
@@ -342,5 +341,19 @@ def checkPostName(request):
 #     return JsonResponse({"error": ""}, status=400)
 
 def get_post_list(request):
-    print("this is a get-post-list")
-    return None
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
+            # name = request.POST['name']
+            # category = request.POST['category']
+            # description = request.POST['description']
+            # post = Post(name=name, category_id=category, description=description)
+            values = list(Post.objects.values())
+            print("this is a get-post-list")
+            return JsonResponse({'status': 'display', 'values': values})
+        else:
+            print("this is a get-post-list")
+            return JsonResponse({'status': 0})

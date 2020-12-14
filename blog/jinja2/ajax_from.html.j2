@@ -110,8 +110,8 @@
 
             mydata = {
                 name: name,
-                email: category,
-                password: description,
+                category: category,
+                description: description,
                 csrfmiddlewaretoken: csr,
             };
 
@@ -119,6 +119,21 @@
                 url: {{ url("get-post-list") }},
                 data: mydata,
                 method: 'POST',
+                success: function (data) {
+                    console.log(data);
+                    console.log(data.values);
+                    if (data.status == "display") {
+                        console.log("data display")
+                        for (let i = 0; i < data.values.length; i++) {
+
+                        }
+                    }
+                    if (data.status == 0) {
+                        console.log("please check")
+                        {#$("#stuid").val('');#}
+                        {#$("form")[0].reset();#}
+                    }
+                },
 
             })
 
