@@ -306,7 +306,9 @@ from django.core import serializers
 def postUplode(request):
     if request.is_ajax and request.method == "POST":
         form = PostForm(request.POST)
+        print(form)
         if form.is_valid():
+            print(form)
             instance = form.save(commit=False)
             instance.user = request.user
             instance.save()
@@ -325,4 +327,19 @@ def checkPostName(request):
         else:
             return JsonResponse({"valid": True}, status=200)
     return JsonResponse({}, status=400)
+
+
+
+# def postUplode(request):
+#     if request.method == "POST":
+#         form = PostForm(request.POST)
+#         if form.is_valid():
+#             instance = form.save(commit=False)
+#             instance.user = request.user
+#             instance.save()
+#             ser_instance = serializers.serialize('json', [instance, ])
+#             return JsonResponse({"instance": ser_instance}, status=200)
+#         else:
+#             return JsonResponse({"error": form.errors}, status=400)
+#     return JsonResponse({"error": ""}, status=400)
 

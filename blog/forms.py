@@ -23,7 +23,20 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         # fields = '__all__'
-        exclude = ['slug', 'likes', 'user_likes', 'post', 'user', 'tag']
+        fields = ['name', 'category', 'description', 'image', 'is_active']
+
+    def clean_name(self):
+        cd = self.cleaned_data
+        num = len(cd['name'])
+        if cd["name"] == '' or num < 10:
+            raise forms.ValidationError('Please fill some thing here under 10 car')
+        return cd['name']
+
+    def clean_category(self):
+        cd = self.cleaned_data
+        if cd['category'] == '':
+            raise forms.ValidationError('Please fill some thing here')
+        return cd['name']
 
 
 class LoginForm(forms.Form):

@@ -3,16 +3,41 @@
 {% block content %}
 
     <div class="container">
-    <div class="col-5">
-        <form id="post-form">
+        <div class="col-5">
+            <div class="row">
+                <div id="feedbackmessage"
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <form id="post-form" novalidate>
             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
             {{ as_crispy_field(form.name) }}
+
+            <div class="col-5">
+                <div class="row">
+                    <div id="namemessage"
+                </div>
+            </div>
+            <div id="msg" style="display: none" class="alert-info"></div>
             {{ as_crispy_field(form.category) }}
+
+            <div class="col-5">
+                <div class="row">
+                    <div id="categorymessage"
+                </div>
+            </div>
+
             {{ as_crispy_field(form.description ) }}
+
+
             {{ as_crispy_field(form.image) }}
+
             {{ as_crispy_field(form.is_active) }}
-            <input type="submit" class="btn btn-primary" value="Create Friend"/>
-        <form>
+
+            <input type="submit" class="btn btn-primary" value="upload post"/>
+            <form>
     </div>
     <hr/>
 {% endblock content %}
@@ -20,27 +45,59 @@
 
 {% block javascript %}
     <script>
-
-        $("#post-form").submit(function (e) {
-            e.preventDefault();
+        $("#post-form").submit(function (event) {
+            event.preventDefault();
             var serializedData = $(this).serialize();
+            console.log("form is not send");
+
+            var name;
+            name = document.getElementById("id_name");
             $.ajax({
-                    type: 'POST',
-                    url: "{{ url('post_uplode')}}",
-                    data: serializedData,
-                    success: function (response) {
-                        $("#post-form").trigger('reset');
-                        var instance = JSON.parse(response["instance"]);
-                        var fields = instance[0]["fields"];
-                        $("#my_friends tbody").prepend(
-                            `<tr>
-                    <td>${fields["name"] || ""}</td>
-                    </tr>`
-                        )
-                    },
+                type: 'POST',
+                url: '{{ url("post_uplode") }}',
+                data: serializedData,
+
+
+                success: function (data) {
+                    console.log("success");
+                    {#console.log(data);#}
+                    $("#feedbackmessage").html("<div class='alert alert-success'>Succesfully post uplode, thank you!</div>");
+                    $("#post-form").trigger('reset');
+                    $("form")[0].reset();
+                    $("#namemessage").html("");
+                    $("#categorymessage").html("");
+                },
+
+                error:function (request,status,error) {
+                       console.log(request)
+                        var responseText = JSON.parse(request.responseText),
+                        data = responseText.error.name;
+                        console.log(data);
+                        console.log(request.responseText);
+                        {#$("#namemessage").html("<div class='alert alert-success'>"+ request.responseText +"</div>");#}
+
+                        if (responseText.error.name){
+                            $("#namemessage").html("<div class='alert alert-success'>"+ responseText.error.name +"</div>");
+                        }else {
+                            $("#namemessage").html("");
+
+                        }
+                        if (responseText.error.category){
+
+                        $("#categorymessage").html("<div class='alert alert-success'>"+ responseText.error.category +"</div>");
+                        }else {
+                            $("#categorymessage").html("");
+                        }
+
+
                 }
-            )
+
+
+            })
+
         })
+
+
     </script>
 {% endblock javascript %}
 
