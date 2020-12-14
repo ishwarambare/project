@@ -68,12 +68,10 @@
                     $("#categorymessage").html("");
                 },
 
-                error:function (request,status,error) {
-                       console.log(request)
+                error:function (request) {
+                        console.log(request);
                         var responseText = JSON.parse(request.responseText),
                         data = responseText.error.name;
-                        console.log(data);
-                        console.log(request.responseText);
                         {#$("#namemessage").html("<div class='alert alert-success'>"+ request.responseText +"</div>");#}
 
                         if (responseText.error.name){

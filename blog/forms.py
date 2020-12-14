@@ -28,8 +28,9 @@ class PostForm(forms.ModelForm):
     def clean_name(self):
         cd = self.cleaned_data
         num = len(cd['name'])
-        if cd["name"] == '' or num < 10:
-            raise forms.ValidationError('Please fill some thing here under 10 car')
+        exists = Post.objects.filter(name__icontains=cd["name"]).exists()
+        if cd["name"] == '' or num > 10 or exists:
+            raise forms.ValidationError('Please fill some thing here under 10 car same post ')
         return cd['name']
 
     def clean_category(self):
