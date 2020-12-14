@@ -26,11 +26,9 @@
 
     <span class="user">
           {% if request.user.is_authenticated %}Hi {{ request.user }},
-
               <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><a href="{{ url('account:logout') }}">logout</a></button>
           {% else %}
               <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><a href="{{ url('account:login') }}">login</a></button>
-
           {% endif %}
       </span>
 
@@ -41,9 +39,7 @@
     <div class="row">
 
         <div class="col-2 mr-auto">
-
             <div class="alert alert-success" role="alert" style="min-height: 850px">
-
                 <h6><strong>These are some blog categories</strong></h6>
                 <ul>
                     <li {% if not category %}class="selected"{% endif %}><a href="{{ url ("home") }}">All</a></li>
@@ -63,18 +59,18 @@
             {% block search %}
             {% endblock %}
 
-            {% block cat %}
-                {#                {% include 'cat.html.j2' %}#}
-            {% endblock %}
+{#            {% block cat %}#}
+
+{#            {% endblock %}#}
         </div>
 
         <div class="col-lg-4">
             <div class="jumbotron">
-                {% block form %}
-                {% endblock %}
+{#                {% block form %}#}
+{#                {% endblock %}#}
+                {% include "ajax_from.html.j2" %}
             </div>
         </div>
-
     </div>
 </div>
 </body>

@@ -37,7 +37,7 @@ class PostForm(forms.ModelForm):
         cd = self.cleaned_data
         if cd['category'] == '':
             raise forms.ValidationError('Please fill some thing here')
-        return cd['name']
+        return cd['category']
 
 
 class LoginForm(forms.Form):
