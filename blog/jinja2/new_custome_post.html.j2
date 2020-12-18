@@ -1,6 +1,19 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Document</title>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+
+
+</head>
+<body>
 <div class="container">
     <h2>Custome data Table</h2>
-    <table>
+    <table id="tableid">
+        <thead>
         <tr>
             <th>#</th>
             <th>post title</th>
@@ -9,18 +22,27 @@
             <th>date</th>
             <th>user</th>
         </tr>
+        </thead>
         <tbody id="#tbody">
         {% for i in post %}
             <tr>
                 <td>{{ i.id }}</td>
                 <td>{{ i.name }}</td>
                 <td>{{ i.description }}</td>
-                <td>{{ i.category_id }}</td>
+                <td>{{ i.category.name }}</td>
                 <td>{{ i.created_at }}</td>
-                <td>{{ i.user_id }}</td>
+                <td>{{ i.user.username }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 </div>
+<script>
 
+$(document).ready( function () {
+    $('#tableid').DataTable();
+} );
+
+</script>
+</body>
+</html>

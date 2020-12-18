@@ -9,6 +9,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
+
+
 <style>
     table {
         font-family: arial, sans-serif;
@@ -43,9 +48,10 @@
                     <div id="namemessage"
                 </div>
             </div>
-<div class="container">
+<div id="container" class="container">
     <h2>Custome data Table</h2>
-    <table>
+    <table id="table_id">
+        <thead>
         <tr>
             <th>#</th>
             <th>post title</th>
@@ -54,6 +60,7 @@
             <th>date</th>
             <th>user</th>
         </tr>
+        </thead>
         <tbody id="#tbody">
         {% for datum in post %}
             <tr>
@@ -94,6 +101,7 @@
                     {#output = "<tr><td>" + x[i].id + "</td><td>" + x[i].name + "</td><td>" + x[i].description + "</td><td>" + x[i].category.name + "</td><td>"+ x[i].created_at +"</td><td>"+ x[i].user.username +"</td><td>";#}
                     {#}#}
                     $("#tbody").html(data.post);
+                    $("#container").hide();
                     $("#namemessage").html(data.post);
 
                 },
@@ -105,7 +113,9 @@
         });
     });
 
-
+$(document).ready( function () {
+    $('#table_id').DataTable();
+} );
 
 </script>
 </body>
