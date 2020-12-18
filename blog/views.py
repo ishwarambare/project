@@ -12,10 +12,11 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import get_template
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import RedirectView, View
 
-from blog.forms import PostForm
+from blog.forms import PostForm, DateForm
 from blog.models import Post, Category
 from .forms import LoginForm
 from .utils import render_to_pdf
@@ -357,3 +358,20 @@ def get_post_list(request):
         else:
             print("this is a get-post-list")
             return JsonResponse({'status': 0})
+
+
+@csrf_exempt
+def get_custome_post(request):
+    date1 = request.POST.get("data1")
+    date2 = request.POST.get("data2")
+    print(date1)
+    print(date2)
+    if date1 is not None and date2 is not None:
+        try:
+            post = list(Post.objects.filter(Q(created_at__gte=date1) & Q(created_at__lte=date2)).values())
+            return JsonResponse({"post": post})
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
+    form = DateForm()
+    post = Post.objects.all()
+    return render(request, 'custome_post.html.j2', {'post': post, 'form': form})

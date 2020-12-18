@@ -43,3 +43,15 @@ class PostForm(forms.ModelForm):
 class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
+
+
+class MyDateField1(forms.DateInput):
+    input_type = 'date'
+
+class MyDateField2(forms.DateInput):
+    input_type = 'date'
+
+class DateForm(forms.Form):
+    date1 = forms.DateField(widget=MyDateField1)
+    date2 = forms.DateField(widget=MyDateField2)
+

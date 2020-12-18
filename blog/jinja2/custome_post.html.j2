@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Document</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+<form action="" method="post" novalidate>
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    Start:{{ form.date1 }}
+    End:{{ form.date2 }}
+    <button type="submit">Go</button>
+</form>
+</div>
+
+<div class="container">
+    <h2>Custome data Table</h2>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>post title</th>
+            <th>description</th>
+            <th>category</th>
+            <th>date</th>
+            <th>user</th>
+        </tr>
+        <tbody id="#tbody">
+        {% for datum in post %}
+            <tr>
+                <td>{{ datum.id }}</td>
+                <td>{{ datum.name }}</td>
+                <td>{{ datum.description }}</td>
+                <td>{{ datum.category.name }}</td>
+                <td>{{ datum.created_at }}</td>
+                <td>{{ datum.user.username }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>
+
+    $(document).ready(function () {
+        $("button").click(function (event) {
+            event.preventDefault();
+            let csr = $("input[name=csrfmiddlewaretoken]").val();
+            var data1 = $("#id_date1").val();
+            var data2 = $("#id_date2").val();
+            console.log(data1);
+            console.log(data2);
+            mydata={
+                data1:data1,
+                data2:data2,
+                csr:csr,
+            };
+            $.ajax({
+                url:"{{ url('get_custome_post') }}",
+                data:mydata,
+                method:"POST",
+                success:function (data) {
+                    console.log(data.post);
+                    let x = data.post;
+                    {#for (let i = 0; i < x.length; i++) {#}
+                    {#output = "<tr><td>" + x[i].id + "</td><td>" + x[i].name + "</td><td>" + x[i].description + "</td><td>" + x[i].category.name + "</td><td>"+ x[i].created_at +"</td><td>"+ x[i].user.username +"</td><td>";#}
+                    {#}#}
+                    {#$("#tbody").html(output);#}
+                },
+                error:function (error) {
+                    console.log(error)
+                }
+
+            })
+        });
+    });
+
+
+
+</script>
+</body>
+</html>
