@@ -369,9 +369,25 @@ def get_custome_post(request):
     if date1 is not None and date2 is not None:
         try:
             post = list(Post.objects.filter(Q(created_at__gte=date1) & Q(created_at__lte=date2)).values())
-            return JsonResponse({"post": post})
+            print(post)
+
+
+
+            data = get_template('new_custome_post.html.j2').render({"post": post})
+            return JsonResponse({"post": data},safe=False)
+
+
+
+
+
+            # return JsonResponse({"post": post})
         except Exception as e:
             return JsonResponse({'error': str(e)})
+
+
+
     form = DateForm()
     post = Post.objects.all()
     return render(request, 'custome_post.html.j2', {'post': post, 'form': form})
+
+

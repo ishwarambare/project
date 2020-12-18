@@ -1,0 +1,26 @@
+<div class="container">
+    <h2>Custome data Table</h2>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>post title</th>
+            <th>description</th>
+            <th>category</th>
+            <th>date</th>
+            <th>user</th>
+        </tr>
+        <tbody id="#tbody">
+        {% for i in post %}
+            <tr>
+                <td>{{ i.id }}</td>
+                <td>{{ i.name }}</td>
+                <td>{{ i.description }}</td>
+                <td>{{ i.category_id }}</td>
+                <td>{{ i.created_at }}</td>
+                <td>{{ i.user_id }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
