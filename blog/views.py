@@ -392,3 +392,6 @@ def get_custome_post(request):
     return render(request, 'custome_post.html.j2', {'post': post, 'form': form})
 
 
+def index(request):
+    pass
+
