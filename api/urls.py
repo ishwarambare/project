@@ -18,4 +18,7 @@ urlpatterns = [
     path('post-uplode-new/', views.PostApiUplode.as_view(), name='post-uplode-new'),
 
 
+    path('image-data-view/', views.ImageDataView.as_view(), name='image-data-view'),
+
+
 ]

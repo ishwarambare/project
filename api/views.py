@@ -1,5 +1,9 @@
+import base64
+from builtins import print
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.core.files.base import ContentFile
 from django.db.models import Q
 from django.http import HttpResponse
 from rest_framework import generics, viewsets, status
@@ -7,8 +11,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from blog.models import Post, Category
-from .serializers import PostSerializers, CategorySerializer, SignUpSerializer
+from blog.models import Post, Category, ImageData
+from .serializers import PostSerializers, CategorySerializer, SignUpSerializer, ImageDataSerializer
 
 
 def home(request):
@@ -81,6 +85,7 @@ class SignUpView(viewsets.ViewSet):
                             status=status.HTTP_200_OK)
         except Exception as e:
             return Response(data={'status': False, 'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class sign_up_view(APIView):
     authentication_classes = ()
@@ -159,3 +164,38 @@ class PostApiUplode(APIView):
             return Response({"result": data})
         except Exception as e:
             return Response(data={'status': False, 'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+def get_file_obj(request):
+    req = request.data
+    obj = req.get('image')
+    name = req.get('name')
+    forma, img_str = obj.split(';base64,')
+    print(forma)
+    print(img_str)
+    _name, ext = forma.split('/')
+
+    if not name:
+        name = _name.split(":")[-1]
+    file_obj = ContentFile(base64.b64decode(img_str), name='{}.{}'.format(name, ext))
+
+    return file_obj
+
+
+class ImageDataView(APIView):
+    def post(self, request, *args, **kwargs):
+        print('data view')
+        data = request.data
+        user = request.user
+
+        try:
+            image = ImageData()
+            image.name = data.get('name', None)
+            if request.data.get('image'):
+                image_file = get_file_obj(request)
+                if image_file:
+                    image.image_file = image_file
+            image.save()
+            return Response(data=ImageDataSerializer(image).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(data={"status": False, "message": str(e)}, status=status.HTTP_400_BAD_REQUEST)

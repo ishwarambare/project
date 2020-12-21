@@ -16,8 +16,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import RedirectView, View
 
-from blog.forms import PostForm, DateForm
-from blog.models import Post, Category
+from blog.forms import PostForm, DateForm, ImageDataForm
+from blog.models import Post, Category, ImageData
 from .forms import LoginForm
 from .utils import render_to_pdf
 
@@ -373,7 +373,7 @@ def get_custome_post(request):
             print(post)
 
             data = get_template('new_custome_post.html.j2').render({"post": post})
-            return JsonResponse({"post": data},safe=False)
+            return JsonResponse({"post": data}, safe=False)
 
             # return JsonResponse({"post": post})
         except Exception as e:
@@ -383,12 +383,34 @@ def get_custome_post(request):
             return JsonResponse({"post": data}, safe=False)
             # return JsonResponse({'error': str(e)})
 
-
-
-
-
     form = DateForm()
     post = Post.objects.all()
     return render(request, 'custome_post.html.j2', {'post': post, 'form': form})
 
 
+import base64
+from django.core.files.base import ContentFile
+
+
+def base64_file(data, name=None):
+    pass
+    # _format, _img_str = data.split(';base64,')
+    # _name, ext = _format.split('/')
+    # if not name:
+    #     name = _name.split(":")[-1]
+    # return ContentFile(base64.b64decode(_img_str), name='{}.{}'.format(name, ext))
+
+
+def base_64_image(request):
+    if request.method == "POST":
+        form = ImageDataForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.user = request.user
+            user.save()
+            return HttpResponse("Image Save", data)
+        else:
+            return HttpResponse("please check creadentioals")
+    else:
+        form = ImageDataForm()
+        return render(request, 'base_64_image.html.j2', {'form': form})

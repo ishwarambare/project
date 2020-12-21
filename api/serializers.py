@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from blog.models import Category, Post, Tag
+from blog.models import Category, Post, Tag, ImageData
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -49,3 +49,9 @@ class SignUpSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
+
+class ImageDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImageData
+        fields = '__all__'

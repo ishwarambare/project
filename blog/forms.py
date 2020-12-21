@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 
-from blog.models import Post
+from blog.models import Post, ImageData
 
 
 class UserForm(forms.ModelForm):
@@ -48,10 +48,18 @@ class LoginForm(forms.Form):
 class MyDateField1(forms.DateInput):
     input_type = 'date'
 
+
 class MyDateField2(forms.DateInput):
     input_type = 'date'
+
 
 class DateForm(forms.Form):
     date1 = forms.DateField(widget=MyDateField1)
     date2 = forms.DateField(widget=MyDateField2)
 
+
+class ImageDataForm(forms.ModelForm):
+    class Meta:
+        model = ImageData
+        fields = '__all__'
+        

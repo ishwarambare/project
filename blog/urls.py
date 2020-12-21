@@ -40,6 +40,7 @@ urlpatterns = [
     path('get-custome-post/', views.get_custome_post, name="get_custome_post"),
 
 
+    path('base-64-image/', views.base_64_image, name="base_64_image"),
 
     # path('signup-new/', views.SignUpView.as_view(), name='signup-new'),
     #
