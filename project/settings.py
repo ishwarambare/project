@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'account',
     'rest_framework',
     'api',
+    'django_crontab',
 ]
 
 SITE_ID = 1
@@ -124,6 +125,8 @@ AUTH_PASSWORD_VALIDATORS = [
     #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     # },
 ]
+
+AUTH_USER_MODEL = 'blog.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
