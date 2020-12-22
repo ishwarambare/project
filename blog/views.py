@@ -373,7 +373,7 @@ def get_custome_post(request):
             print(post)
 
             data = get_template('new_custome_post.html.j2').render({"post": post})
-            return JsonResponse({"post": data}, safe=False)
+            return JsonResponse({"post": data},safe=False)
 
             # return JsonResponse({"post": post})
         except Exception as e:
