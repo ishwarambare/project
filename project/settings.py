@@ -158,3 +158,20 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'account:login'
 LOGOUT_URL = 'account:logout'
+
+CRONJOBS = [
+    ('* * * * *', 'blog.cron.my_cron_job'),
+    ('*/1 * * * *', 'blog.cron.my_new_cron_job'),
+    ('*/1 * * * *', 'blog.cron.send_birthday_wish'),
+]
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'ambareishu@gmail.com'
+EMAIL_HOST_PASSWORD = '9096827781'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False

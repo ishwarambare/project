@@ -20,6 +20,7 @@ from blog.forms import PostForm, DateForm, ImageDataForm
 from blog.models import Post, Category, ImageData
 from .forms import LoginForm
 from .utils import render_to_pdf
+from django.core.mail import send_mail
 
 
 def signup(request):
@@ -140,8 +141,8 @@ def search(request):
     if request.method == 'GET':
         search_name = request.GET.get('search')
         status = Post.objects.filter(Q(name__icontains=search_name) | Q(description__icontains=search_name))
-        form=PostForm()
-        return render(request, "search_list.html.j2", {"books": status,'form':form})
+        form = PostForm()
+        return render(request, "search_list.html.j2", {"books": status, 'form': form})
     else:
         return HttpResponse('search not found')
 
@@ -374,9 +375,9 @@ def get_custome_post(request):
             print(post)
 
             data = get_template('new_custome_post.html.j2').render({"post": post})
-            return JsonResponse({"post": data},safe=False)
+            return JsonResponse({"post": data}, safe=False)
 
-
+            # return JsonResponse({"post": post})
         except Exception as e:
             post = Post.objects.all()
 
@@ -415,3 +416,13 @@ def base_64_image(request):
     else:
         form = ImageDataForm()
         return render(request, 'base_64_image.html.j2', {'form': form})
+
+import datetime
+from django.contrib.auth import get_user_model
+User = get_user_model()
+def my_new_cron_job1(request):
+    date = datetime.date.today()
+    for i in User.objects.all():
+        if date == i.birth_date:
+            send_mail("birthday wish", f"Happy birthday new things {i.username}", "ambareishu@gmail.com", [i.email])
+    return HttpResponse("done")

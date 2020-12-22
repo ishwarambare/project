@@ -42,7 +42,10 @@ urlpatterns = [
 
     path('base-64-image/', views.base_64_image, name="base_64_image"),
 
+
+
+    path('my-new-cron-job1/', views.my_new_cron_job1, name="my_new_cron_job1"),
+
     # path('signup-new/', views.SignUpView.as_view(), name='signup-new'),
-    #
     # path('ajax/validate_username/', views.validate_username, name='validate_username'),
 ]
