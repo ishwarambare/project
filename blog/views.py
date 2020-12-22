@@ -374,9 +374,9 @@ def get_custome_post(request):
             print(post)
 
             data = get_template('new_custome_post.html.j2').render({"post": post})
-            return JsonResponse({"post": data},safe=False)
+            return JsonResponse({"post": data}, safe=False)
 
-
+            # return JsonResponse({"post": post})
         except Exception as e:
             post = Post.objects.all()
 
@@ -402,6 +402,11 @@ def base64_file(data, name=None):
     # return ContentFile(base64.b64decode(_img_str), name='{}.{}'.format(name, ext))
 
 
+<<<<<<<<< Temporary merge branch 1
+def index(request):
+    pass
+
+=========
 def base_64_image(request):
     if request.method == "POST":
         form = ImageDataForm(request.POST, request.FILES)
@@ -415,3 +420,4 @@ def base_64_image(request):
     else:
         form = ImageDataForm()
         return render(request, 'base_64_image.html.j2', {'form': form})
+>>>>>>>>> Temporary merge branch 2
